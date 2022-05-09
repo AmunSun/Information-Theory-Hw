@@ -1,0 +1,30 @@
+clear;
+r=input('输入信源个数');
+s=input('输入信宿个数');
+deta=input('输入信道容量精度');
+Q=rand(r,s);
+A=sum(Q,2);
+B=repmat(A,1,s);
+disp('信源概率转移矩阵'),p=Q./B%%得到信源概率转移矩阵
+i=1:1:r;
+q(i)=1/r;
+disp('原始信源分布'),q
+c=-10e-8;
+C=repmat(q',1,s);
+for k=1:100000
+  m=p.*C;
+  a=sum(m);
+  sul=repmat(a,r,1);
+  t=m./sul;
+  D=exp(sum(p.*log(t),2));%%求\Delta
+  su2=sum(D);
+  q=D/su2;
+  C=repmat(q,1,s);
+  c(k+1)=log(sum(exp(sum(p.*log(t),2))))/log(2);%%求C^{(k+1)}
+  kk=abs(c(k+1)-c(k))/c(k+1);
+  if(kk<=0.000001)
+   break;
+  end;
+end;
+disp('最大信道容量信源分布:q='),disp(q')
+disp('最大信道容量:c='),disp(c(k+1))
